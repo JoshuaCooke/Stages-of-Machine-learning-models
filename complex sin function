@@ -1,0 +1,12 @@
+# complex sin function
+import math
+from matplotlib import pyplot as plt
+import random
+
+
+def sin(x):
+    return math.sin(math.radians(x))
+
+a = list(range(360*5))
+b = [x/360 + 0.8*sin(0.2*x) + 0.7*sin(x) + 0.5*sin(2.3*x) + 0.2*sin(6.1*x) + 0.07*sin(13*x) for x in a]
+plt.plot(x,y)
