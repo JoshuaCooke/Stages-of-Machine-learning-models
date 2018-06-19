@@ -1,3 +1,4 @@
+
 import random
 import numpy 
 import math
@@ -7,9 +8,43 @@ from matplotlib import pyplot as plt
 ######################################
 def sin(x):
     return math.sin(math.radians(x))
+
 ######################################
+x = list(range(360*4))
+y = [sin(x) for x in x]
 
+######################################
+X,Y,Z = [],[],[]
+lookback = 10
 
+for i in range(lookback,len(y)):
+    X.append(y[i-lookback:i])
+    Y.append(y[i])
+    Z.append(y[i])
+
+X = numpy.array(X)
+X = X.reshape(-1,lookback,1)
+Y = numpy.array(Y)
+Y = Y.reshape(-1,1)
+
+model = keras.models.Sequential()
+model.add(keras.layers.LSTM(units=50, activation='tanh', input_shape=(10,1),
+    return_sequences=True))
+model.add(keras.layers.LSTM(units=20, activation='tanh', return_sequences=False))
+#model.add(keras.layers.Flatten())
+model.add(keras.layers.Dropout(0.2))
+model.add(keras.layers.Dense(units=20, activation='linear'))
+model.add(keras.layers.Dense(units=6, activation='linear'))
+model.add(keras.layers.Dense(units=1, activation='linear'))
+
+model.compile(optimizer='rmsprop', loss='mse', metrics=['mse'])
+model.summary()
+
+history = model.fit(X,Y, epochs=100, batch_size=32)
+predictions = model.predict(X)
+
+####################################################
+# more complex model
 x = list(range(360*4))
 a = [x/360+0.7*sin(x)+0.3*sin(2.3*x) for x in x]
 
