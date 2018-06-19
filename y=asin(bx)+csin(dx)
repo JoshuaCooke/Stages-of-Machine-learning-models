@@ -1,0 +1,27 @@
+import random
+import numpy 
+import math
+import keras
+from matplotlib import pyplot as plt 
+
+######################################
+def sin(x):
+    return math.sin(math.radians(x))
+######################################
+
+
+x = list(range(360*4))
+a = [x/360+0.7*sin(x)+0.3*sin(2.3*x) for x in x]
+
+A,B = [],[]
+for i in range(lookback,len(a)):
+    A.append(a[i-lookback:i])
+    B.append(a[i])
+
+A = numpy.array(A)
+A = A.reshape(-1,lookback,1)
+A_predict = model.predict(A)
+
+plt.plot(range(len(B)),B)
+plt.plot(range(len(A_predict)),A_predict)
+plt.show()
